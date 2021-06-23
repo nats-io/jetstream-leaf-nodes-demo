@@ -50,7 +50,7 @@ export CACHE='"./cache9"'; nats-server -c cluster-spoke-2-3.cfg
 ### Context sys
 
 When editing the context, make sure to set credentials to the absolute path of `./keys/creds/OP/SYS/sys.creds` and Server URLs to:
-nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4282,nats://127.0.0.1:4292,nats://127.0.0.1:4202
+`nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4282,nats://127.0.0.1:4292,nats://127.0.0.1:4202`
 
 ```bash
 nats context add sys
@@ -60,7 +60,7 @@ mats context edit sys
 ### Context hub
 
 When editing the context, make sure to set credentials to the absolute path of `./keys/creds/OP/TEST/leaf.creds` and Server URLs to:
-nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4282
+`nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4282`
 
 ```bash
 nats context add sys
@@ -70,7 +70,7 @@ mats context edit sys
 ### Context spoke-1
 
 When editing the context, make sure to set credentials to the absolute path of `./keys/creds/OP/TEST/leaf.cred` and Server URLs to:
-nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4293
+`nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4293`
 
 ```bash
 nats context add spoke-1
@@ -80,7 +80,7 @@ mats context edit spoke-1
 ### Context spoke-1
 
 When editing the context, make sure to set credentials to the absolute path of `./keys/creds/OP/TEST/leaf.cred` and Server URLs to:
-nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4203
+`nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4203`
 
 ```bash
 nats context add spoke-2
