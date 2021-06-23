@@ -19,6 +19,7 @@ This directory contains `nsc` directories `store` and `keys` containing jwt and 
 Server config files are of the format `cluster-<domain>-<server number>.cfg`
 `nats-account-resolver.cfg` contains the account resolver setup shared by all server.
 The directories `CACHE*` are nats account resolver directories for each server.
+They contain already pushed account JWT so you are ready to go. 
 `main.go` contains the source code shown during the presentation.
 `outline.txt` contains the outline of the presentation.
 The folder `puml` contains the plant uml files used to generate the png named `topology*`
