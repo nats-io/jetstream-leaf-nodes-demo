@@ -13,6 +13,17 @@ nsc env --operator OP
 
 The context used in the demo need to be created separately using 
 
+## Content of this repo
+
+This directory contains `nsc` directories `store` and `keys` containing jwt and creds.
+Server config files are of the format `cluster-<domain>-<server number>.cfg`
+`nats-account-resolver.cfg` contains the account resolver setup shared by all server.
+The directories `CACHE*` are nats account resolver directories for each server.
+`main.go` contains the source code shown during the presentation.
+`outline.txt` contains the outline of the presentation.
+The folder `puml` contains the plant uml files used to generate the png named `topology*`
+To generate install plantuml and execute `plantuml -tpng <puml file>`.
+
 ## Server Startup
 
 To have a single nats account resolver config file each server needs the environment variable `CACHE` set.
