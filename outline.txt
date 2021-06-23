@@ -1,0 +1,8 @@
+Outline:
+1. Introduce the leafnode setup used here
+2. Talk about the implications of connecting the system account as leaf node remote
+3. Introduce the concept of JetStream domains
+4. Use stream mirrors to connect a command and control stream across domains
+5. Use stream source to aggregate streams across domains
+6. Demonstrate that domain connectivity is not tied to the underlying topology
+7. Connect streams through accounts

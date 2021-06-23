@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+database "JetStream domain hub" as jshub {
+    queue cnc
+}
+
+database "JetStream domain spoke-1" as jsspoke1 {
+    queue "recv-cnc" as test1 
+}
+
+database "JetStream domain spoke-2" as jsspoke2 {
+    queue "recv-cnc" as test2 
+}
+
+cnc ---> test1 : mirror
+cnc ---> test2 : mirror
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+database "JetStream domain hub" as jshub {
+    queue aggregate
+}
+
+database "JetStream domain spoke-1" as jsspoke1 {
+    queue "test" as test1 
+}
+
+database "JetStream domain spoke-2" as jsspoke2 {
+    queue "test" as test2 
+    queue "backup-test-spoke-1" as backup
+}
+
+aggregate <--- test1 : source
+aggregate <--- test2 : source
+test1 ---> backup : mirror
+@enduml

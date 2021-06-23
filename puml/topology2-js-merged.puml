@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+database "JetStream" as js {
+    frame "cluster-hub" as hub { 
+        node "srv-4222" as s1 
+        node "srv-4232" as s2 
+        node "srv-4282" as s3
+
+        s1<--->s2 : route
+        s2<--->s3 : route
+        s3<--->s1 : route
+    }
+    frame "cluster-spoke-1" as spoke1 {
+        node "srv-4242" as s4
+        node "srv-4252" as s5 
+        node "srv-4292" as s6
+
+        s4<--->s5 : route
+        s5<--->s6 : route
+        s6<--->s4 : route
+    }
+    frame "cluster-spoke-2" as spoke2 {
+        node "srv-4262" as s7
+        node "srv-4272" as s8
+        node "srv-4202" as s9
+        
+        s7<--->s8 : route
+        s8<--->s9 : route
+        s9<--->s7 : route
+    }
+
+    hub <---> spoke1 : leafnode remote
+    hub <---> spoke2 : leafnode remote
+}
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+database "JetStream domain hub" as jshub {
+    package "account: HUBACC" {
+		queue aggregate
+	}
+}
+
+package "account: EXCACC" as dmz #white {
+    label "listed in\nleafnode remotes" as l1
+}
+
+database "JetStream domain spoke-1" as spoke1 {
+    package "account: LEAFACC" as e1 {
+		queue test as test1
+	}
+    dmz <--- test1 : "export: \nJetStream leafacc.spoke-1"
+}
+
+database "JetStream domain spoke-2" as spoke2 {
+    package "account: LEAFACC" as e2 {
+		queue test as test2
+	}
+    dmz <--- test2 : "export: \nJetStream leafacc.spoke-2"
+}
+
+aggregate <--- dmz : "import & source: \nJetStream leafacc.spoke-1"
+aggregate <--- dmz : "import & source: \nJetStream leafacc.spoke-2"
+@enduml

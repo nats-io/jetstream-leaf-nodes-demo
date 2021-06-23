@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+database "JetStream domain hub" as jshub {
+    package "account: TEST" {
+		queue aggregate
+	}
+    package "account: IMPORTER" {
+		queue crossacc
+	}
+}
+
+crossacc <--- aggregate : mirror
+@enduml

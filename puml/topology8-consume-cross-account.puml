@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+package "account: IMPORTER" {
+	actor main
+}
+database "JetStream domain hub" as jshub {
+    package "account: TEST" {
+		queue aggregate
+	}
+}
+
+main <--- aggregate : mirror
+@enduml
