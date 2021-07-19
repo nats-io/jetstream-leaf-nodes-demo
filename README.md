@@ -1,6 +1,6 @@
 # JetStream-LeafNodes-Demo
 
-This repository contains the configuration for the JPersistence at the Edge == JetStream in Leaf Nodes demo.
+This repository contains the configuration for the [Persistence at the Edge == JetStream in Leaf Nodes demo](https://www.youtube.com/watch?v=0MkS_S7lyHk).
 The state is identical to the one the demo started with. 
 
 To set up your `nsc` environment execute the followings commands in base directory:
