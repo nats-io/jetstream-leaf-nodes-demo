@@ -30,7 +30,7 @@ To generate install plantuml and execute `plantuml -tpng <puml file>`.
 To have a single nats account resolver config file each server needs the environment variable `CACHE` set.
 This variable is referenced in line four of the config file `nats-account-resolver.cfg`.
 
-To start the server execute the following commands.
+To start the server execute the following commands:
 
 ```bash
 export CACHE='"./cache1"'; nats-server -c cluster-hub-1.cfg
@@ -44,6 +44,11 @@ export CACHE='"./cache6"'; nats-server -c cluster-spoke-1-3.cfg
 export CACHE='"./cache7"'; nats-server -c cluster-spoke-2-1.cfg
 export CACHE='"./cache8"'; nats-server -c cluster-spoke-2-2.cfg
 export CACHE='"./cache9"'; nats-server -c cluster-spoke-2-3.cfg
+```
+
+Or all at once:
+```bash
+i=0; for c in cluster*.cfg; do ((i=i+1)); export CACHE=cache$i; nats-server -c $c  & ; done
 ```
 
 ## Nats cli contexts
