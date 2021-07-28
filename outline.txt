@@ -5,4 +5,5 @@ Outline:
 4. Use stream mirrors to connect a command and control stream across domains
 5. Use stream source to aggregate streams across domains
 6. Demonstrate that domain connectivity is not tied to the underlying topology
-7. Connect streams through accounts
+7. Connect streams across accounts
+8. Connect streams through accounts
