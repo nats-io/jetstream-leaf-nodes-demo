@@ -59,8 +59,8 @@ To create the contexts used execute the commands below. The context will functio
 ```
 nats context save sys --creds ./keys/creds/OP/SYS/sys.creds   --server "nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4282,nats://127.0.0.1:4292,nats://127.0.0.1:4202" 
 nats context save hub     --creds ./keys/creds/OP/TEST/leaf.creds --server "nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4282" 
-nats context save spoke-1 --creds ./keys/creds/OP/TEST/leaf.creds --server "nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4293"
-nats context save spoke-2 --creds ./keys/creds/OP/TEST/leaf.creds --server "nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4203"
+nats context save spoke-1 --creds ./keys/creds/OP/TEST/leaf.creds --server "nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4292"
+nats context save spoke-2 --creds ./keys/creds/OP/TEST/leaf.creds --server "nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4202"
 ```
 
 ## Video Script and Commands
