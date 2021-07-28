@@ -1262,7 +1262,7 @@ Here is the resulting topology.
 ![`imgcat topology7-mirror-cross-account.png`](topology7-mirror-cross-account.png)
 
 The account `TEST` is the account we have been using so far.
-We want to mirror the stream `aggregate` that we just created into a stream named `crossacc`
+We want to mirror the stream `aggregate` that we just created into a stream named `crossacc`.
 Mirroring that particular stream allows the importing stream in the other account to be independent of the actual number of spokes.
 
 But first we need another JS enabled account and user:
@@ -1290,16 +1290,16 @@ The other advantage is that you don't have to write and run a program that does 
 [ OK ] added public service export "Consumer-API"
 ```
 
-Here we are exporting the consumer api as public service with a stream as response (meaning more than one message as response).
+Here we are exporting the consumer API as public service with a stream as response (meaning more than one message as response).
 This can also be done as private export which requires a token signed by the exporting account for the importing account. Therefore you have precise control on who can import.
-You can also export the entire jetstream api by exporting $JS.hub.API.>.
+You can also export the entire JetStream API by exporting `$JS.hub.API.>`.
 If you do so, you are giving full control over JS to everyone importing.
 I also export `$JS.hub.API` instead of `$JS.API`. 
 This is so that I can pin access to a particular JS domain and not just use to the one where I connect to.
 
-On import we change $JS.hub.API to JS.test@hub.API. 
-This is done to stay clear of the $JS prefix which may get additions as new features are added to jetstream.
-We give it a different prefix and subsequently specify that prefix if we want to talk to that particular jetstream. 
+On import we change `$JS.hub.API` to `JS.test@hub.API`. 
+This is done to stay clear of the $JS prefix which may get additions as new features are added to JetStream.
+We give it a different prefix and subsequently specify that prefix if we want to talk to that particular JetStream. 
 Btw this import renaming feature is generally available. 
 Different organizations working on different applications most likely have different naming schemes. 
 So when they clash, just rename on import. 
@@ -1894,10 +1894,10 @@ Right now I have to restart nats-server such that the change is picked up.
 Now we are connecting the accounts.
 
 Selectively, we export subjects we want to be able to send to and receive from in other accounts and domains.
-For every domain and account I wish to connect, I'm exporting the entire domain specific jetstream API as well as a delivery subject.
+For every domain and account I wish to connect, I'm exporting the entire domain specific JetStream API as well as a delivery subject.
 You can also add dedicated subjects to communicate with regular nats.
 
-For every account, I export a delivery subject containing account name and domain as well the jetstream domain specific API.
+For every account, I export a delivery subject containing account name and domain as well the JetStream domain specific API.
 
 ```txt
 > nsc add export --account HUBACC  --service --response-type Stream --subject '$JS.hub.API.>'
