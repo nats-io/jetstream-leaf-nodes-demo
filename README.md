@@ -3,7 +3,7 @@
 This repository contains the configuration for the [Persistence at the Edge == JetStream in Leaf Nodes demo](https://www.youtube.com/watch?v=0MkS_S7lyHk) as well as the [script](#video-script-and-commands) it is based on.
 The state is identical to the one the demo started with. 
 
-To set up your `nsc` environment execute the followings commands in base directory:
+To set up your `nsc` environment execute the following commands in the base directory:
 
 ```txt
 export NKEYS_PATH="`pwd`/keys"
@@ -11,23 +11,23 @@ nsc env -s "`pwd`/store"
 nsc env --operator OP
 ```
 
-The context used in the demo need to be created separately using 
+The context used in the demo needs to be created separately using the following;
 
-## Content of this repo
+## Content of This Repo
 
-This directory contains `nsc` directories `store` and `keys` containing jwt and creds.
+This directory contains `nsc` directories `store` and `keys` containing JWT and creds.
 Server config files are of the format `cluster-<domain>-<server number>.cfg`
-`nats-account-resolver.cfg` contains the account resolver setup shared by all server.
-The directories `CACHE*` are nats account resolver directories for each server.
-They contain already pushed account JWT so you are ready to go. 
-`main.go` contains the source code shown during the presentation.
-`outline.txt` contains the outline of the presentation.
-The folder `puml` contains the plant uml files used to generate the png named `topology*`
-To generate install plantuml and execute `plantuml -tpng <puml file>`.
+`nats-account-resolver.cfg` contains the account resolver setup shared by all servers.
+The directories `CACHE*` are NATS account resolver directories for each server.
+They contain already pushed account JWTs so you are ready to go. 
+`main.go` contains the source code shown during the YouTube demo.
+`outline.txt` contains the outline of the YouTube demo.
+The folder `puml` contains the plant uml files used to generate the png named `topology*`.
+To generate, install [plantuml](https://plantuml.com/) and execute `plantuml -tpng <puml file>`.
 
 ## Server Startup
 
-To have a single nats account resolver config file each server needs the environment variable `CACHE` set.
+To have a single NATS account resolver config file, each server needs the environment variable `CACHE` set.
 This variable is referenced in line four of the config file `nats-account-resolver.cfg`.
 
 To start the server execute the following commands:
@@ -52,9 +52,9 @@ Or all at once:
 i=0; for c in cluster*.cfg; do ((i=i+1)); export CACHE=cache$i; nats-server -c $c  & ; done
 ```
 
-## Nats cli contexts
+## NATS CLI Contexts
 
-To create the contexts used execute the commands below. The context will function in the current directory only.
+To create the contexts used, execute the commands below. The context will function in the current directory only.
 
 ```
 nats context save sys --creds ./keys/creds/OP/SYS/sys.creds   --server "nats://127.0.0.1:4222,nats://127.0.0.1:4232,nats://127.0.0.1:4242,nats://127.0.0.1:4252,nats://127.0.0.1:4262,nats://127.0.0.1:4272,nats://127.0.0.1:4282,nats://127.0.0.1:4292,nats://127.0.0.1:4202" 
@@ -65,25 +65,25 @@ nats context save spoke-2 --creds ./keys/creds/OP/TEST/leaf.creds --server "nats
 
 ## Video Script and Commands
 
-Nats is the networking abstraction to finally free you and your apps from networking and the silos that plague us all.
+NATS is the networking abstraction to finally free you and your apps from networking and the silos that plague us all.
 It allows you to refocus on your data and it’s flows on a global scale.
-We have recently added JetStream, our persistence layer.
+We have recently added our newest persistence layer, JetStream in NATS Server v2.2.
 
 This video is about JetStream at the edge.
 
-Our server are light weight and can therefore run in resource constrained environments.
+The NATS server is lightweight and can therefore run in resource constrained environments.
 This allows you to have persistence on a remote edge and have it function independently, without connectivity to the cloud.
 If you want to, you can configure JetStream such that your locally persisted data is automatically uploaded to the cloud as soon as you regain connectivity.
 
 This applies specifically to cases where the edge site itself moves in and out of network connectivity, 
 or when you have a great number of sites and are guaranteed a network outage at any given time.
 
-Depending on your needs you would install one or more JetStream enabled server in your edge site and connect them to server in the cloud using leaf node connections.
-To demonstrate the principle, I am working with two cluster that are connected to a hub. But you can have as many as needed.
+Depending on your needs you would install one or more JetStream enabled servers in your edge site and connect them to a server in the cloud using leaf node connections.
+To demonstrate the principle, I am working with two clusters that are connected to a hub. But you can have as many as needed.
 
 This is going to be a whirlwind tour through features and use cases.
 Do not focus on every detail. Please focus on what our software can do and which use cases are relevant to you.
-I will provide [further links](#relevant-links) at the end. 
+I will provide [additional links](#relevant-links) at the end. 
 
 ### Outline
 
@@ -95,7 +95,7 @@ In this video I want to:
 4. [Use stream mirrors to connect a command and control stream across domains](#stream-mirrors-across-domains)
 5. [Use stream source to aggregate streams across domains](#stream-source-across-domains)
 6. [Demonstrate that domain connectivity is not tied to the underlying topology](#sourcemirror-not-dependent-on-topology)
-7. [Connect streams cross accounts](#connect-streams-cross-accounts) 
+7. [Connect streams across accounts](#connect-streams-cross-accounts) 
 8. [Connect streams through accounts](#connect-streams-through-accounts)
 9. [Relevant Documentation](#relevant-links)
 
@@ -105,10 +105,10 @@ This is the topology of my setup.
 
 ![`imgcat topology1-server.png`](topology1-server.png)
 
-There is a central cluster to which two clusters `spoke-1` and `spoke-2` connect via leafnode connections
+There is a central cluster to which two clusters `spoke-1` and `spoke-2` connect via leafnode connections.
 I am using two of these to demonstrate the principle, but you can have as many as needed.
-To show it's possible, each cluster consists of 3 server. Use fewer if you do not need the redundancy. 
-let's have a look at server one in the cluster hub.
+To show it's possible, each cluster consists of three servers but use fewer if you do not need the redundancy. 
+Let's have a look at server one in the cluster hub.
 
 ```txt
 > cat cluster-hub-1.cfg
@@ -139,7 +139,7 @@ include ./nats-account-resolver.cfg
 ```
 
 This is your regular cluster and leafnode setup.
-JetStream has a new property called domain, I'll be talking about this in a moment.
+JetStream has a new property called `domain` which I'll be talking about in a moment.
 
 ```txt
 > cat nats-account-resolver.cfg
@@ -155,11 +155,11 @@ resolver_preload: {
 }
 ```
 
-Enabling multi tenancy, accounts are the secure nats isolation context. 
+Enabling multi tenancy, accounts are the secure NATS isolation context. 
 Unless explicitly defined, connections belonging to one account can not communicate with connections belonging to another.
 Because of this we generally recommend one account per application. However, their scope is up to you.
 
-In addition, this is an operator setup and uses the nats account resolver to retrieve accounts.
+In addition, this is an operator setup and uses the NATS account resolver to retrieve accounts.
 Instead of defining an account in every server we provide a way to obtain it.
 On connect, the client provides a web token carrying user permissions as well as proof of possession of a corresponding private key.
 After the account web token is downloaded, the chain of trust, operator signs account token, account signs user token is verified and all relevant limits and settings are applied.
@@ -196,7 +196,7 @@ Leaf nodes are clustered as well.
 #### Connected System Account Implications
 
 Although leaf nodes bridge authentication domains, if you have the same operator setup on either end and connect system accounts, it will appear to you as one large authentication domain.
-You could use such a setup for example when you can't use super cluster due to fire wall rules and have to use leaf node connections instead.
+You could use such a setup, for example, when you can't use a super cluster due to firewall rules and have to use leaf node connections instead.
 
 Another benefit of connecting system accounts is that you can obtain monitoring information from every server in this network.
 
@@ -233,8 +233,8 @@ Another benefit of connecting system accounts is that you can obtain monitoring 
 ╰─────────────────┴────────────┴───────────────────┴───────────────────┴─────────────╯
 ```
 
-Here you can see all the leaf nodes as well.
-However, if you should connect system accounts heavily depends on your security needs!
+Here you can see all of the leaf nodes as well.
+Please note however, the decision to connect system accounts heavily depends on your security needs!
 
 ```txt
 > cat leafnode-remotes.cfg
@@ -257,35 +257,32 @@ no_advertise: true
 ```
 
 This is exactly what was done here. 
-The first remote connects the system accounts
-The second remote connects the account we will be using
-
-If you have the system account connected but no domain specified, this is the JetStream topology you'd get.
+The first remote connects the system accounts, he second remote connects the account we will be using. If you have the system account connected but no domain specified, this is the JetStream topology you'd get.
 
 ![`imgcat topology2-js-merged.png`](topology2-js-merged.png)
 
 This is a singe JetStream spanning all of our clusters.
-JetStream has a meta data leader that is in charge of creating and placing streams and consumer.
-In a hub/spoke setup like the one here, this meta data leader will be pinned to server that have no leaf node remotes specified (meaning, the hub).
-This avoids having a leaf node server become a leader and thus forcing other leafs to take two hops to get to it.
-But, while leaf node connections are down, in the affected server, you could not create streams or consumer during that time.
+JetStream has a meta data leader that is in charge of creating and placing streams and consumers.
+In a hub/spoke setup like the one here, this meta data leader will be pinned to server that has no leaf node remotes specified (meaning, the hub).
+This avoids having a leaf node server become a leader and thus forcing other leaf nodes to take two hops to get to it.
+But, while leaf node connections are down, in the affected server, you could not create streams or consumers during that time.
 
 #### JetStream Domains
 
-However, if you specify a JetStream `domain` in your configs, each `domain` will become an independent JetStream.
+Unlike above with a single JetStream, if you specify a JetStream `domain` in your configs, each `domain` will become an independent JetStream.
 My config will result in this topology.
 
 ![`imgcat topology3-js-domains.png`](topology3-js-domains.png)
 
-If you do not connect system accounts, This will be the resulting topology as well.
+If you do not connect system accounts, this will be the resulting topology as well.
 Presence of domains cuts off certain system account traffic along leaf node connections and makes JetStream addressable by domain name.
 
 The part I want to show you now is how to connect these independent JetStreams.
 
-On the left I am starting a watch command that repeatedly executes 3 `nats` commands.
-This cli command is our swiss army knife. Among other things it can be used to publish and subscribe, interact with JetStream and generate various reports.
+On the left I am starting a watch command that repeatedly executes three `nats` commands.
+This CLI command is our swiss army knife. Among other things it can be used to publish and subscribe, interact with JetStream and generate various reports.
 It supports a context that can be set once and subsequently reused.
-Here, each invocation of nats uses a context that uses appropriate credentials and connects it to the corresponding cluster.
+Here, each invocation of NATS uses a context that uses appropriate credentials and connects it to the corresponding cluster.
 
 ```txt
 > watch -n 1 "nats --context=hub s report ; nats --context=spoke-1 s report; nats --context=spoke-2 s report"
@@ -302,16 +299,16 @@ No Streams defined
 ```
 
 This will be my primary tool to show you what happened.
-Right now, there are no stream yet.
+Right now, there are no streams yet.
 
-#### Stream Mirrors across Domains
+#### Stream Mirrors Across Domains
 
-One way to connect streams across JS domains would be to have a command and control stream. 
+One way to connect streams across JetStream domains would be to have a command and control stream. 
 Essentially to communicate from the hub to each spoke without loss, even when leaf nodes are disconnected.
 
 ![`imgcat topology4-js-streams-mirror.png`](topology4-js-streams-mirror.png)
 
-We have a stream called cnc and it is subscribing to a subject by the same name.
+We have a stream called `cnc` and it is subscribing to a subject by the same name.
 This stream is located in the hub. 
 It's content is then mirrored to a `recv-cnc` stream located in each node.
 
@@ -361,9 +358,8 @@ State:
      Active Consumers: 0
 ```
 
-Streams offer a variety of settings like storage backend, various limits etc...
-I will only give arguments for values I want to be changed.
-Here stream replica count and subject to subscribe to. 
+Streams offer a variety of settings like storage backend, various limits etc..
+I will only give arguments for values I want to be changed; shown here, stream replica count and subject to subscribe to. 
 This way I can quickly go through the questionnaire.  
 
 Let's also store a few messages:
@@ -382,8 +378,8 @@ Let's also store a few messages:
 12:25:50 Published 11 bytes to "cnc"
 ```
 
-In each leaf node cluster I want a stream named recv-cnc that is a mirror of the cnc stream.
-The `output` option causes `nats` to store the settings in a file named `recv-cnc`
+In each leaf node cluster I want a stream named `recv-cnc` that is a mirror of the `cnc` stream.
+The `output` option causes `nats` to store the settings in a file named `recv-cnc`.
 
 ```txt
 > nats --context=hub stream add recv-cnc --mirror cnc --replicas 3 --output recv-cnc
@@ -400,7 +396,7 @@ The `output` option causes `nats` to store the settings in a file named `recv-cn
 ? Delivery prefix
 ```
 
-now I'm creating that stream in each domain
+Now I'm creating that stream in each domain.
 
 ```txt
 > nats --context=hub stream add --config recv-cnc --js-domain spoke-1
@@ -487,7 +483,7 @@ State:
      Active Consumers: 0
 ```
 
-It is important to point out that names do only need to be unique within a JetStream domain.
+It is important to point out that names only need to be unique within a JetStream domain.
 On the left hand side you can see the streams created, and that our `recv-cnc` streams already copied all data from `cnc`.
 
 ```txt
@@ -540,7 +536,7 @@ Obtaining Stream stats
 ╰──────────┴────────┴─────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-#### Stream Source across Domains
+#### Stream Source Across Domains
 
 Doing this the other way around, collecting data in the spokes and aggregating them in a stream in the hub is possible as well.
 
@@ -635,10 +631,10 @@ State:
 ```
 
 Please note that I created the streams in the respective domain while having been connected to the hub. 
-If you want to interact with a JetStream that is not in the domain you are connected to, you can provide the `js-domain` option.
+If you want to interact with a JetStream that is not in the domain to which you are connected, you can provide the `js-domain` option.
 This can also be set in the context.
 
-Let's also send 10 messages
+Let's also send 10 messages.
 
 ```txt
 > nats --context=hub pub test "hello world" --count 10
@@ -710,7 +706,7 @@ Obtaining Stream stats
 ╰──────────┴────────┴─────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-If you are using a non overlapping set of subject names in each domain, this won't happen to you.
+If you are using a non-overlapping set of subject names in each domain, this won't happen to you.
 Same if you are using a different set of accounts in each domain.
 Later I will show a third way of doing this.
 
@@ -915,7 +911,7 @@ Obtaining Stream stats
 ╰──────────┴────────┴─────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-#### Source/Mirror not dependent on Topology
+#### Source/Mirror Not Dependent on Topology
 
 Let me also demonstrate that source and mirror stream relationships do not have to align with the underlying topology.
 
@@ -1061,7 +1057,7 @@ Obtaining Stream stats
 ╰─────────────────────┴────────┴─────────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-Let's quickly demonstrate that this works the way I explained by shutting down all server in the cluster hub.
+Let's quickly demonstrate that this works the way I explained by shutting down all servers in the cluster hub.
 Here our watch command for the hub can't connect any longer.
 
 ```
@@ -1240,19 +1236,19 @@ Obtaining Stream stats
 ╰─────────────────────┴────────┴─────────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-#### Connect Streams Cross Accounts
+#### Connect Streams Across Accounts
 
-Until now we have exchanged streams across JS domains, but we stayed in the same account.
+Until now we have exchanged streams across JetStream domains, but we stayed in the same account.
 Now let me show you how to exchange stream data across accounts.
 
 This will largely be an exercise in maintaining prefixes to avoid subject overlaps.
 
 I am using `nsc` to create accounts, and users, and modify them. 
-Because I am using the nats account resolver, when done, I can simply `push` my changes into the network. 
+Because I am using the NATS account resolver, when done, I can simply `push` my changes into the network. 
 The `nsc` directory is in the same directory where my servers got started.
 Part of my server config just uses the creds files in the nsc keys directory.
 I did this, so that for this demo I have everything in one place without having to copy files around.
-However, the power of our jwt based approach is that you can have that `nsc` environment anywhere.
+However, the power of our JWT based approach is that you can have that `nsc` environment anywhere.
 Provided you can connect to `push`, everything will work just the same. 
 
 The commands I show next can be translated into accounts in regular config files as well.
@@ -1265,7 +1261,7 @@ The account `TEST` is the account we have been using so far.
 We want to mirror the stream `aggregate` that we just created into a stream named `crossacc`.
 Mirroring that particular stream allows the importing stream in the other account to be independent of the actual number of spokes.
 
-But first we need another JS enabled account and user:
+But first we need another JetStream enabled account and user:
 
 ```txt
 > nsc add account -n IMPORTER
@@ -1293,9 +1289,9 @@ The other advantage is that you don't have to write and run a program that does 
 Here we are exporting the consumer API as public service with a stream as response (meaning more than one message as response).
 This can also be done as private export which requires a token signed by the exporting account for the importing account. Therefore you have precise control on who can import.
 You can also export the entire JetStream API by exporting `$JS.hub.API.>`.
-If you do so, you are giving full control over JS to everyone importing.
+If you do so, you are giving full control over JetStream to everyone importing.
 I also export `$JS.hub.API` instead of `$JS.API`. 
-This is so that I can pin access to a particular JS domain and not just use to the one where I connect to.
+This is so I can pin access to a particular JetStream domain and not just to the one I connect to.
 
 On import we change `$JS.hub.API` to `JS.test@hub.API`. 
 This is done to stay clear of the $JS prefix which may get additions as new features are added to JetStream.
@@ -1303,7 +1299,7 @@ We give it a different prefix and subsequently specify that prefix if we want to
 Btw this import renaming feature is generally available. 
 Different organizations working on different applications most likely have different naming schemes. 
 So when they clash, just rename on import. 
-As long as they same number/type of wildcards are present you are good.
+As long as the same number/type of wildcards are present, you are good.
 Reordering of wildcards would be possible to, but that's for another time.
 
 ```txt
@@ -1311,8 +1307,8 @@ Reordering of wildcards would be possible to, but that's for another time.
 [ OK ] added service import "$JS.hub.API.CONSUMER.>"
 ```
 
-We also need a subject to deliver our data on.
-It is important to note that the subject we will be using in a bit is a lot longer than that.
+We also need a subject on which to deliver our data.
+It is important to note that the subject we will be using later in this tutorial is a lot longer than that.
 Essentially, each mirror will need a unique subject. 
 
 I am picking the common prefix on export and subsequently add parts.
@@ -1463,7 +1459,7 @@ Obtaining Stream stats
 ╰──────────┴────────┴─────────────────┴───────────────┴────────┴─────┴───────╯
 ```
 
-The api prefix is what we changed the api on import to.
+The API prefix is what we changed the API on import to.
 This is so we can differentiate between our JetStream and the JetStream in the other account (in possibly the same domain).
 For the delivery prefix we need to add the stream name. 
 Just consider, what if I wanted to mirror the same stream twice.
@@ -1482,13 +1478,13 @@ Since exports in `TEST` exist already, I briefly clean them up to avoid warnings
 [ OK ] deleted service import "$JS.hub.API.CONSUMER.>"
 ```
 
-What needs to be exported as service responding with a stream is the consumer's NEXT subject 
+What needs to be exported as service responding with a stream is the consumer's `NEXT` subject 
 
 ```txt
 > nsc add export --account TEST --name Next-API --service --response-type Stream --subject '$JS.hub.API.CONSUMER.MSG.NEXT.aggregate.DUR'
 [ OK ] added public service export "Next-API"
 ```
-The `NEXT` subject consists of the Prefix (with domain), consumer message next, stream name and durable consumer name.
+The `NEXT` subject consists of the prefix (with domain), consumer message next, stream name and durable consumer name.
 
 On import we rename `$JS.hub.API` to a different prefix, say `from.test.API`.
 
@@ -1497,7 +1493,7 @@ On import we rename `$JS.hub.API` to a different prefix, say `from.test.API`.
 [ OK ] added service import "$JS.hub.API.CONSUMER.MSG.NEXT.aggregate.DUR"
 ```
 
-To acknowledge messages, the ack api needs to be exported/imported as well. We do so without name changes.
+To acknowledge messages, the ack API needs to be exported/imported as well. We do so without name changes.
 
 ```txt
 > nsc add export --account TEST --name Ack-API --service --response-type Stream --subject '$JS.ACK.aggregate.DUR.>'
@@ -1546,7 +1542,7 @@ And upload the changes:
               [ OK ] pushed to a total of 9 nats-server
 ```
 
-Create the consumer DUR that we already referenced in our exports/imports.
+Create the consumer `DUR` that we already referenced in our exports/imports.
 Consumer add, stream name, durable consumer name, type pull consumer, deliver all messages in the stream:
 
 ```txt
@@ -1586,9 +1582,9 @@ State:
 
 ```
 
-To consume I am overwriting the credentials specified in the context.
-This is the user we created just now, consumer, next stream, durable, and this is the important bit, `js-api-prefix` 
-For that We use the api prefix `from.test.API` that we set on import. 
+To consume, I am overwriting the credentials specified in the context.
+This is the user we created just now, consumer, next stream, durable, and this is the important bit, `js-api-prefix`.
+For that, we use the API prefix `from.test.API` that we set on import. 
 
 And now we get our first message:
 
@@ -1672,8 +1668,8 @@ Let's briefly look at what would be necessary to do in a program.
     57	}
 ```
 
-Similar to the cli, we specify `nats.APIPrefix` in line `20`.
-Due to very specific export, this program has only limited JS API access.
+Similar to the CLI, we specify `nats.APIPrefix` in line `20`.
+Due to very specific export, this program has only limited JetStream API access.
 Therefore `nats.Bind` in line `27` provides stream and durable name explicitly.
 
 Let's run it, connecting to the hub and using our new user.
@@ -1703,16 +1699,15 @@ There you go, messages are directly received from a durable in another account.
 #### Connect Streams Through Accounts 
 
 Finally I want to show you an account setup that addresses the same subject issue mentioned earlier.
-You will be able to use the same account on each leafnode and isolate it such that you don't have to worry about cross traffic.
-This will clearly increase the complexity of your setup, so only do that if it otherwise makes your life simpler.
+You will be able to use the same account on each leaf node and isolate it such that you don't have to worry about cross traffic.
+This will clearly increase the complexity of your setup, so you would only do this if it would otherwise make your life simpler.
 
 ![`imgcat topology9-source-cross-domain-account.png`](topology9-source-cross-domain-account.png)
 
 Essentially we will selectively connect subjects in our accounts through a dedicated exchange account.
-We will be needing a name that identifies a leaf node or leafnode cluster uniquely. 
-As I am demonstrating JetStream I am using domain names for that.
-However you are not limited to JetStream and any of your subject can be connected in a similar way.
-This image shows the direction leaf to hub, but the setup I am showing next only needs two extra imports to enable the other direction as well.
+We will need a name that identifies a leaf node or leaf node cluster uniquely. 
+As I am demonstrating JetStream, I am using domain names for that, however you are not limited to JetStream and any of your subjects can be connected in a similar way.
+This image shows the direction leaf node to hub, but the setup I am showing next only needs two extra imports to enable the other direction as well.
 So, let's create these accounts:
 
 I'm creating the exchange account and a user. (No JetStream on purpose):
@@ -1853,8 +1848,8 @@ No Streams defined
 We have nothing defined yet, which is why they are empty. 
 
 Furthermore, ONLY put that exchange account `EXCACC` into the remotes.
-Not listing the other accounts is what isolates them from the hub and each other!
-I have looked up the account id earlier using `nsc list keys`. 
+Not listing the other accounts is what isolates them from the hub and each other.
+I have looked up the account ID earlier using `nsc list keys`. 
 Register account EXCACC as remote:
 
 ```txt
@@ -1895,7 +1890,7 @@ Now we are connecting the accounts.
 
 Selectively, we export subjects we want to be able to send to and receive from in other accounts and domains.
 For every domain and account I wish to connect, I'm exporting the entire domain specific JetStream API as well as a delivery subject.
-You can also add dedicated subjects to communicate with regular nats.
+You can also add dedicated subjects to communicate with regular NATS.
 
 For every account, I export a delivery subject containing account name and domain as well the JetStream domain specific API.
 
@@ -1914,13 +1909,13 @@ For every account, I export a delivery subject containing account name and domai
 [ OK ] added public stream export "deliver.leafacc.spoke-2.>"
 ```
 
-All these exports are then imported into the exchange account.
+All of these exports are then imported into the exchange account.
 
-Please note that every subject already contains, a fixed portion, that functions as type, the exporting account name as well as the domain.
+Please note that every subject already contains a fixed portion, that functions as type, the exporting account name, as well as the domain.
 In that order!
 
-Where this is not the case, such as the JS API, i remap accordingly.
-This allows us to properly identify streams and services in an account in a leafnode as identified by it's domain.
+Where this is not the case, such as the JetStream API, I remap accordingly.
+This allows us to properly identify streams and services in an account in a leaf node as identified by it's domain.
 
 ```txt
 > nsc add import --account EXCACC --src-account HUBACC  --service --remote-subject '$JS.hub.API.>'     --local-subject '$JS.hubacc.hub.API.>'
@@ -1946,8 +1941,8 @@ Then we re-export all subjects together. This is where the type comes in handy w
 [ OK ] added public stream export "deliver.>"
 ```
 
-Finally import into every account you want connected. 
-I'm more specific than in the previous export as I need to avoid a self import cycle with say `deliver.hubacc.>`.
+Finally, import into every account you want connected. 
+I'm more specific than in the previous export as I need to avoid a self-import cycle with say `deliver.hubacc.>`.
 If you want to be more specific and pin an import to a domain, just add it. 
 
 ```txt
@@ -2038,12 +2033,11 @@ Upload all changes:
               [ OK ] pushed to a total of 9 nats-server
 ```
 
-Then we create a stream in each leaf domain.
-Using the stream configuration test from earlier.
+Then we create a stream in each leaf domain using the stream configuration test from earlier.
 Because it is possible, I do so by connecting to the `hub`, using hub account credentials.
-A domain essentially means we use the prefix `$JS.<domain>.API`
+A domain essentially means we use the prefix `$JS.<domain>.API`.
 
-When connected to the hub, because I imported `$JS.leafacc.spoke-1.API` and I neglected to avoid `$JS`, I can use the domain name `leafacc.spoke-1` in the `nats` cli.
+When connected to the hub, because I imported `$JS.leafacc.spoke-1.API` and I neglected to avoid `$JS`, I can use the domain name `leafacc.spoke-1` in the `nats` CLI.
 
 ```txt
 > nats --context=hub --creds keys/creds/OP/HUBACC/imp.creds s add --config test --js-domain leafacc.spoke-1
@@ -2116,7 +2110,7 @@ State:
      Active Consumers: 0
 ```
 
-There we go, streams are created 
+There we go, streams are created.
 
 ```txt
 > watch -n 1 "nats --context=hub --creds keys/creds/OP/HUBACC/imp.creds s report ; \
@@ -2174,7 +2168,7 @@ Now I publish messages to each leaf cluster, using credentials for the leaf acco
 14:51:45 Published 0 bytes to "test"
 ```
 
-Because of the isolation, the messages stay in the domain they originated in.
+Because of the isolation, the messages stay in the domain in which they originated.
 Every stream contains 10 messages:
 
 ```txt
@@ -2223,7 +2217,7 @@ These messages will not be received because of our isolation scheme.
 14:53:44 Published 0 bytes to "test"
 ```
 
-Message count is unaltered as spoke's are isolated from hub as well.
+Message count is unaltered as spokes are isolated from the hub as well.
 
 ```txt
 > watch -n 1 "nats --context=hub --creds keys/creds/OP/HUBACC/imp.creds s report ; \
@@ -2254,7 +2248,7 @@ Obtaining Stream stats
 ╰────────┴─────────┴───────────┴──────────┴───────┴──────┴─────────┴───────────────────────────────╯
 ```
 
-Now lets create the importing stream inside the hub and the hub account. 
+Now let's create the importing stream inside the hub and the hub account. 
 I'm importing from a different account with the prefix `$JS.leafacc.spoke-1.API`.
 The delivery prefix is `deliver.leafacc.spoke-1.hubacc.hub.aggregate`.
 For `spoke-2` the corresponding prefix and deliver prefix are picked.
@@ -2332,7 +2326,7 @@ State:
 About the delivery prefix. You are essentially creating a stream that copies from one account in a domain to another account in another domain.
 Thus I'd recommend that the delivery prefix consists of all these parts: type, from account, from domain, to account, to domain, importing stream name.
 
-There you go, it's working see on the left hand side.
+There you go, you can see it's working on the left hand side.
 
 ```txt
 > watch -n 1 "nats --context=hub --creds keys/creds/OP/HUBACC/imp.creds s report ; \
@@ -2381,18 +2375,17 @@ Obtaining Stream stats
 
 Please be aware that it does not matter that the hub is actually a hub.
 I want you to take away that you can chain accounts and connect through them.
-Just think of a scenario where you have multiple leaf nodes into an ngs account, collecting data locally.
-One of your leaf nodes is specked bigger and this is where you aggregate streams and do all your analytics. 
+Just think of a scenario where you have multiple leaf nodes into an NGS account, collecting data locally.
+One of your leaf nodes is specifed bigger and this is where you aggregate streams and do all of your analytics. 
 
 One thing I hope you noticed is the lack of host names and the flexibility that gives you.
-Of course, they are needed in the server configuration to create the nats network.
-They are also needed to connect to that network. 
-But you don't need different ones for each of your applications. 
+Of course, they are needed in the server configuration to create the NATS network.
+They are also needed to connect to that network, but you don't need different ones for each of your applications. 
 Instead you get to focus on your data and how it flows. 
 
-We will continue to add improvements to the setups and workflows introduced in this video. 
+We will continue to add improvements to the setups and workflows introduced in this tutorial. 
 I certainly have noticed a few rough edges, so it is worthwhile checking back every once in a while.
-If you have questions, reach out on our slack channel on: natsio.slack.com
+If you have questions, please contact the NATS team on Slack [slack.nats.io](https://slack.nats.io).
 
 #### Relevant Links
 
