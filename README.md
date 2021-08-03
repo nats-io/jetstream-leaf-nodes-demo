@@ -23,7 +23,7 @@ They contain already pushed account JWT so you are ready to go.
 `main.go` contains the source code shown during the presentation.
 `outline.txt` contains the outline of the presentation.
 The folder `puml` contains the plant uml files used to generate the png named `topology*`
-To generate install plantuml and execute `plantuml -tpng <puml file>`.
+To generate install [plantuml](https://plantuml.com/) and execute `plantuml -tpng <puml file>`.
 
 ## Server Startup
 
